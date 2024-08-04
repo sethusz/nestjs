@@ -11,4 +11,5 @@ export class CreateArticleDto {
 	readonly body: string
 
 	readonly tagList?: string[]
+	static title: string
 }

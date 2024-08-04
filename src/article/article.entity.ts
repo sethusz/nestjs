@@ -34,13 +34,13 @@ export class ArticleEntity {
 	tagList: string[]
 
 	@Column({ default: 0 })
-	favoritesCound: number
+	favoritesCount: number
 
 	@BeforeUpdate()
 	updateTimestamp() {
 		this.updatedAt = new Date()
 	}
 
-	@ManyToOne(() => UserEntity, user => user.articles)
+	@ManyToOne(() => UserEntity, user => user.articles, { eager: true })
 	author: UserEntity
 }
