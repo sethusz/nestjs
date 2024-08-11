@@ -18,10 +18,20 @@ import { UserEntity } from '@app/user/user.entity'
 import { User } from '@app/user/decorators/user.decorator'
 import { ArticleResponseInterface } from './types/articleResponse.interface'
 import { ArticlesResponseInterface } from './types/ArticlesResponseInterface.interface'
+import { BackendValidationPipe } from '@app/shared/backendValidation.pipe'
 
 @Controller('articles')
 export class ArticleController {
 	constructor(private readonly articleService: ArticleService) {}
+
+	@Get('feed')
+	@UseGuards(AuthGuard)
+	async getFeed(
+		@User('id') currentUserId: number,
+		@Query() query: any
+	): Promise<ArticlesResponseInterface> {
+		return await this.articleService.getFeed(currentUserId, query)
+	}
 
 	@Get()
 	async findAlls(
@@ -33,7 +43,7 @@ export class ArticleController {
 
 	@Post()
 	@UseGuards(AuthGuard)
-	@UsePipes(new ValidationPipe())
+	@UsePipes(new BackendValidationPipe())
 	async create(
 		@User() currentUser: UserEntity,
 		@Body('article') CreateArticleDto: CreateArticleDto
